@@ -128,16 +128,26 @@ bool HelloWorld::init()
 
 	m_pProgram->updateUniforms();
 
+	// îwåiêFÇÃéwíË
+	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
+
     return true;
 }
 
 void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
+	// å∏éZçáê¨
+	//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+	//glBlendFunc(GL_ONE, GL_ONE);
+
+	// îºìßñæçáê¨
+	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
 	m_pProgram->use();
 
 	Vec3 pos[4];
-	Vec3 color[4];
+	Vec4 color[4];
 
 	const float x = 0.7f;
 	const float y = 0.7f;
@@ -157,35 +167,30 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	float green = 0.0f;
 	float blue = 0.0f;
 
-	color[0] = Vec3(red, green, blue); 
-	color[1] = Vec3(red, green, blue);
-	color[2] = Vec3(red, green, blue);
-	color[3] = Vec3(red, green, blue);
+	color[0] = Vec4(1, 0, 0, 1); 
+	color[1] = Vec4(1, 0, 0, 1);
+	color[2] = Vec4(1, 0, 0, 1);
+	color[3] = Vec4(1, 0, 0, 1);
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 3, GL_FLOAT, GL_FALSE, 0, color);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
 	//            ê}å`         êÊì™î‘çÜÅ@í∏ì_êî
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	// ê¬éläpå`ÇÃï`âÊ
-
 	pos[0].x += 0.1f; pos[0].y += 0.1f;
 	pos[1].x += 0.1f; pos[1].y += 0.1f;
 	pos[2].x += 0.1f; pos[2].y += 0.1f;
 	pos[3].x += 0.1f; pos[3].y += 0.1f;
 
-	red = 0.0f;
-	green = 0.0f;
-	blue = 1.0f;
-
-	color[0] = Vec3(red, green, blue);
-	color[1] = Vec3(red, green, blue);
-	color[2] = Vec3(red, green, blue);
-	color[3] = Vec3(red, green, blue);
+	color[0] = Vec4(0, 0, 1, 0.2f);
+	color[1] = Vec4(0, 0, 1, 0.2f);
+	color[2] = Vec4(0, 0, 1, 0.2f);
+	color[3] = Vec4(0, 0, 1, 0.2f);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-
+	glBlendEquation(GL_FUNC_ADD);
 }
 
 
