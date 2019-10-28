@@ -211,9 +211,6 @@ xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\uv\prebuilt\win32\*.*" "$(OutDir)"
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\Resources\shaders\test.vsh" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -46,9 +46,4 @@
       <Filter>src</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\Resources\shaders\test.vsh">
-      <Filter>src</Filter>
-    </FxCompile>
-  </ItemGroup>
 </Project>
