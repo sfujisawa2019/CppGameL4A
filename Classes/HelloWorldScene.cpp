@@ -128,6 +128,9 @@ bool HelloWorld::init()
 
 	m_pProgram->updateUniforms();
 
+	counter = 0;
+	step2 = false;
+
     return true;
 }
 
@@ -148,10 +151,39 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	// ŽOŠpŒ`‚Q‚Â‚ß
 	pos[3] = Vec3(x, y, 0);
 
-	color[0] = Vec3(0, 0, 0); // •
-	color[1] = Vec3(1, 0, 0); // Ô
-	color[2] = Vec3(0, 1, 0); // —Î
-	color[3] = Vec3(0, 0, 1); // Â
+	//color[0] = Vec3(0, 0, 0); // •
+	//color[1] = Vec3(1, 0, 0); // Ô
+	//color[2] = Vec3(0, 1, 0); // —Î
+	//color[3] = Vec3(0, 0, 1); // Â
+
+	counter++;
+
+	float red;
+	float green;
+	float blue;
+
+	if (step2) //step2‚Ì‚Æ‚«
+	{
+		red = 0.0f;
+		green = 1.0f - counter / 60.0f;
+		blue = 0.0f + counter / 60.0f;
+	}
+	else // step1‚Ì‚Æ‚«
+	{
+		red = 1.0f - counter / 60.0f;
+		green = 0.0f + counter / 60.0f;
+		blue = 0.0f;
+		if (counter >= 60)
+		{
+			step2 = true;
+			counter = 0;
+		}
+	}
+
+	color[0] = Vec3(red, green, blue); 
+	color[1] = Vec3(red, green, blue);
+	color[2] = Vec3(red, green, blue);
+	color[3] = Vec3(red, green, blue);
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 3, GL_FLOAT, GL_FALSE, 0, color);
