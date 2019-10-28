@@ -44,9 +44,6 @@ public:
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
 	// •Ï”éŒ¾
 	cocos2d::GLProgram* m_pProgram;
-
-	int counter;
-	bool step2;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
