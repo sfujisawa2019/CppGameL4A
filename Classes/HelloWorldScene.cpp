@@ -167,6 +167,25 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	//            図形         先頭番号　頂点数
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+	// 青四角形の描画
+
+	pos[0].x += 0.1f; pos[0].y += 0.1f;
+	pos[1].x += 0.1f; pos[1].y += 0.1f;
+	pos[2].x += 0.1f; pos[2].y += 0.1f;
+	pos[3].x += 0.1f; pos[3].y += 0.1f;
+
+	red = 0.0f;
+	green = 0.0f;
+	blue = 1.0f;
+
+	color[0] = Vec3(red, green, blue);
+	color[1] = Vec3(red, green, blue);
+	color[2] = Vec3(red, green, blue);
+	color[3] = Vec3(red, green, blue);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+
 }
 
 
