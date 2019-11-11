@@ -119,17 +119,18 @@ bool HelloWorld::init()
 	GLenum error;
 
 	m_pProgram = new GLProgram;
-	m_pProgram->initWithFilenames("shaders/shader_1tex.vsh", "shaders/shader_1tex.fsh");
+	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
 
 	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
-	m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	//m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
 
 	m_pProgram->link();
 
 	m_pProgram->updateUniforms();
 
-	uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
+	//uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
+	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
@@ -143,7 +144,9 @@ bool HelloWorld::init()
 
 void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
+	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+
 	m_pProgram->use();
 
 	counter++;
@@ -152,16 +155,16 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	Vec4 color[6];
 	Vec2 uv[6];
 
-	const float x = 0.7f;
-	const float y = 0.7f;
+	const float x = 50.0f;
+	const float y = 50.0f;
 	// 三角形１つめ
-	pos[0] = Vec3(-x - counter / 120.0f, -y + counter / 120.0f, 0);
-	pos[1] = Vec3(-x - counter / 120.0f,  y + counter / 120.0f, 0);
-	pos[2] = Vec3( x - counter / 120.0f, -y + counter / 120.0f, 0);
+	pos[0] = Vec3(-x, -y, 0);
+	pos[1] = Vec3(-x,  y, 0);
+	pos[2] = Vec3( x, -y, 0);
 	// 三角形２つめ
-	pos[3] = Vec3(-x + counter / 120.0f,  y - counter / 120.0f, 0);
-	pos[4] = Vec3( x + counter / 120.0f, -y - counter / 120.0f, 0);
-	pos[5] = Vec3( x + counter / 120.0f,  y - counter / 120.0f, 0);
+	pos[3] = Vec3(-x,  y, 0);
+	pos[4] = Vec3( x, -y, 0);
+	pos[5] = Vec3( x,  y, 0);
 
 	//color[0] = Vec3(0, 0, 0); // 黒
 	//color[1] = Vec3(1, 0, 0); // 赤
@@ -172,12 +175,12 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	float green = 0.0f;
 	float blue = 0.0f;
 
-	color[0] = Vec4(1, 1, 1, 1); 
-	color[1] = Vec4(1, 1, 1, 1);
-	color[2] = Vec4(1, 1, 1, 1);
-	color[3] = Vec4(1, 1, 1, 1);
-	color[4] = Vec4(1, 1, 1, 1);
-	color[5] = Vec4(1, 1, 1, 1);
+	color[0] = Vec4(1, 0, 0, 1); 
+	color[1] = Vec4(1, 0, 0, 1);
+	color[2] = Vec4(1, 0, 0, 1);
+	color[3] = Vec4(1, 0, 0, 1);
+	color[4] = Vec4(1, 0, 0, 1);
+	color[5] = Vec4(1, 0, 0, 1);
 
 	uv[0] = Vec2(0, 1);
 	uv[1] = Vec2(0, 0);
@@ -188,10 +191,46 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
+	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
 	
-	glUniform1i(uniform_sampler, 0);
-	GL::bindTexture2D(m_pTexture->getName());
+	// ワールドビュープロジェクション行列の生成
+	static float yaw = 0.0f;
+	yaw += 0.01f;
+	Mat4 matProjection;
+	Mat4 matView;
+	Mat4 matWVP;
+	Mat4 matWorld = Mat4::IDENTITY;
+	matProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+	matView = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+
+	// スケーリング行列
+	Mat4 matScale;
+	// 全方向２倍のスケーリング行列を生成
+	Mat4::createScale(1.0f, 1.0f, 1.0f, &matScale);
+	// 回転行列
+	Mat4 matRot;
+	Mat4 matRotX, matRotY, matRotZ;
+	// 各軸周りの回転行列を計算し、最後に合成
+	Mat4::createRotationZ(0, &matRotZ);
+	Mat4::createRotationX(0, &matRotX);
+	Mat4::createRotationY(yaw, &matRotY);
+	matRot = matRotY * matRotX * matRotZ;
+	// 平行行列
+	Mat4 matTrans;
+	Mat4::createTranslation(Vec3(250.0f, 50.0f, 0.0f), &matTrans);
+	// ワールド行列を合成
+	matWorld = matTrans * matRot * matScale;
+
+	matWVP = matProjection * matView * matWorld;
+
+	// 右向きを表すベクトル
+	Vec3 v1(1, 0, 0);
+	matWorld.transformVector(&v1);
+
+	//glUniform1i(uniform_sampler, 0);
+	//GL::bindTexture2D(m_pTexture->getName());
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 
 	//            図形         先頭番号　頂点数
 	glDrawArrays(GL_TRIANGLES, 0, 6);
