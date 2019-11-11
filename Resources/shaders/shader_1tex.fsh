@@ -7,6 +7,4 @@ void main(){
 	vec4 texcolor = texture2D(sampler, v_texCoord);
 	// テクスチャカラーと頂点カラーを掛けて出力
 	gl_FragColor = texcolor * v_color;
-	//                   R    G    B    A
-	//gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

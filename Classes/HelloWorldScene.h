@@ -48,6 +48,8 @@ public:
 	int uniform_sampler;
 
 	cocos2d::Texture2D* m_pTexture;
+
+	int counter;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
