@@ -148,18 +148,20 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	counter++;
 
-	Vec3 pos[4];
-	Vec4 color[4];
-	Vec2 uv[4];
+	Vec3 pos[6];
+	Vec4 color[6];
+	Vec2 uv[6];
 
 	const float x = 0.7f;
 	const float y = 0.7f;
 	// 三角形１つめ
-	pos[0] = Vec3(-x, -y, 0);
-	pos[1] = Vec3(-x,  y, 0);
-	pos[2] = Vec3( x, -y, 0);
+	pos[0] = Vec3(-x - counter / 120.0f, -y + counter / 120.0f, 0);
+	pos[1] = Vec3(-x - counter / 120.0f,  y + counter / 120.0f, 0);
+	pos[2] = Vec3( x - counter / 120.0f, -y + counter / 120.0f, 0);
 	// 三角形２つめ
-	pos[3] = Vec3(x, y, 0);
+	pos[3] = Vec3(-x + counter / 120.0f,  y - counter / 120.0f, 0);
+	pos[4] = Vec3( x + counter / 120.0f, -y - counter / 120.0f, 0);
+	pos[5] = Vec3( x + counter / 120.0f,  y - counter / 120.0f, 0);
 
 	//color[0] = Vec3(0, 0, 0); // 黒
 	//color[1] = Vec3(1, 0, 0); // 赤
@@ -174,11 +176,15 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	color[1] = Vec4(1, 1, 1, 1);
 	color[2] = Vec4(1, 1, 1, 1);
 	color[3] = Vec4(1, 1, 1, 1);
+	color[4] = Vec4(1, 1, 1, 1);
+	color[5] = Vec4(1, 1, 1, 1);
 
-	uv[0] = Vec2(0 + counter / 120.0f, 1);
-	uv[1] = Vec2(0 + counter / 120.0f, 0);
-	uv[2] = Vec2(1 + counter / 120.0f, 1);
-	uv[3] = Vec2(1 + counter / 120.0f, 0);
+	uv[0] = Vec2(0, 1);
+	uv[1] = Vec2(0, 0);
+	uv[2] = Vec2(1, 1);
+	uv[3] = Vec2(0, 0);
+	uv[4] = Vec2(1, 1);
+	uv[5] = Vec2(1, 0);
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
@@ -188,7 +194,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	GL::bindTexture2D(m_pTexture->getName());
 
 	//            図形         先頭番号　頂点数
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 }
