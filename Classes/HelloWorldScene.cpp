@@ -113,20 +113,25 @@ bool HelloWorld::init()
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
         // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
+        //this->addChild(sprite, 0);
     }
 
 	GLenum error;
 
 	m_pProgram = new GLProgram;
-	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
+	m_pProgram->initWithFilenames("shaders/shader_1tex.vsh", "shaders/shader_1tex.fsh");
 
 	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
+	m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
 
 	m_pProgram->link();
 
 	m_pProgram->updateUniforms();
+
+	uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
+
+	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
 	// 背景色の指定
 	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
@@ -136,18 +141,12 @@ bool HelloWorld::init()
 
 void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-	// 減算合成
-	//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-	//glBlendFunc(GL_ONE, GL_ONE);
-
-	// 半透明合成
-	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	m_pProgram->use();
 
 	Vec3 pos[4];
 	Vec4 color[4];
+	Vec2 uv[4];
 
 	const float x = 0.7f;
 	const float y = 0.7f;
@@ -167,30 +166,27 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	float green = 0.0f;
 	float blue = 0.0f;
 
-	color[0] = Vec4(1, 0, 0, 1); 
-	color[1] = Vec4(1, 0, 0, 1);
-	color[2] = Vec4(1, 0, 0, 1);
-	color[3] = Vec4(1, 0, 0, 1);
+	color[0] = Vec4(1, 1, 1, 1); 
+	color[1] = Vec4(1, 1, 1, 1);
+	color[2] = Vec4(1, 1, 1, 1);
+	color[3] = Vec4(1, 1, 1, 1);
+
+	uv[0] = Vec2(0, 1);
+	uv[1] = Vec2(0, 0);
+	uv[2] = Vec2(1, 1);
+	uv[3] = Vec2(1, 0);
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
+	
+	glUniform1i(uniform_sampler, 0);
+	GL::bindTexture2D(m_pTexture->getName());
+
 	//            図形         先頭番号　頂点数
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	// 青四角形の描画
-	pos[0].x += 0.1f; pos[0].y += 0.1f;
-	pos[1].x += 0.1f; pos[1].y += 0.1f;
-	pos[2].x += 0.1f; pos[2].y += 0.1f;
-	pos[3].x += 0.1f; pos[3].y += 0.1f;
 
-	color[0] = Vec4(0, 0, 1, 0.2f);
-	color[1] = Vec4(0, 0, 1, 0.2f);
-	color[2] = Vec4(0, 0, 1, 0.2f);
-	color[3] = Vec4(0, 0, 1, 0.2f);
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-	glBlendEquation(GL_FUNC_ADD);
 }
 
 
