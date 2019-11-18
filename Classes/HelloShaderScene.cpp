@@ -77,16 +77,17 @@ bool HelloShader::init()
 	this->addChild(sprite, 0);
 
 	// HelloWorld‚ÌƒŒƒCƒ„[‚ğì¬B•`‰æ—Dæ‚Í1
-	Layer* layer = HelloWorld::create();
-	this->addChild(layer, 1);
+	Scene* scene = HelloWorld::create();
+	this->addChild(scene, 1);
 
-	Layer* layer;
-	Sprite* spriteA, spriteB, spriteC;
+	Sprite* spriteA = Sprite::create("HelloWorld.png");
+	//Sprite* spriteB;
+	//Sprite* spriteC;
 
-	// layer‚ÉSpriteA,B,C‚ğ‚Ô‚ç‰º‚°‚é
-	layer->addChild(spriteA, 2);
-	layer->addChild(spriteB, 0);
-	layer->addChild(spriteC, 1);
+	//// layer‚ÉSpriteA,B,C‚ğ‚Ô‚ç‰º‚°‚é
+	//scene->addChild(spriteA, 2);
+	//scene->addChild(spriteB, 0);
+	//scene->addChild(spriteC, 1);
 
 	return true;
 }
