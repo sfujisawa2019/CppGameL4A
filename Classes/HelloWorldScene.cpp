@@ -198,6 +198,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	// ラジアン
 	//yaw += 0.01f;
 	//yaw += CC_RADIANS_TO_DEGREES(1.0f);
+	// 120frmで一回転
 	yaw += CC_DEGREES_TO_RADIANS(3.0f);
 	Mat4 matProjection;
 	Mat4 matView;
@@ -211,8 +212,11 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	// スケーリング行列
 	Mat4 matScale;
-	// 全方向２倍のスケーリング行列を生成
-	Mat4::createScale(1.0f, 1.0f, 1.0f, &matScale);
+	// 120frmで周期が一周
+	float scale = CC_DEGREES_TO_RADIANS(3.0f * counter);
+	// 引数をラジアンとしてサイン関数（6.28ぐらいで一周期）
+	scale = sinf(scale);
+	Mat4::createScale(scale, scale, scale, &matScale);
 	// 回転行列
 	Mat4 matRot;
 	Mat4 matRotX, matRotY, matRotZ;
