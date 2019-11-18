@@ -237,7 +237,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	const float y = 50.0f;
 	const float z = 50.0f;
 
-	//////// １枚めの描画
+	//////// １枚めの描画 前面
 	{
 		// 三角形１つめ
 		pos[0] = Vec3(-x, -y, z);
@@ -248,11 +248,10 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 		pos[4] = Vec3(x, -y, z);
 		pos[5] = Vec3(x, y, z);
 
-		//            図形         先頭番号　頂点数
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	//////// ２枚めの描画
+	//////// ２枚めの描画 奥面
 	{
 		// 三角形１つめ
 		pos[0] = Vec3(-x, -y, -z);
@@ -263,29 +262,43 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 		pos[4] = Vec3(x, -y, -z);
 		pos[5] = Vec3(x, y, -z);
 
-		//            図形         先頭番号　頂点数
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	//////// ３枚めの描画
-	{
+	//////// ３枚めの描画 // 左面
+	//{
+	//	// 三角形１つめ
+	//	pos[0] = Vec3(-x, -y, z); // 左、下、前
+	//	pos[1] = Vec3(-x, y, z);  // 左、上、前
+	//	pos[2] = Vec3(-x, -y, -z);// 左、下、奥
+	//	// 三角形２つめ	
+	//	pos[3] = Vec3(-x, y, z);   // 左、上、前
+	//	pos[4] = Vec3(-x, -y, -z); // 左、下、奥
+	//	pos[5] = Vec3(-x, y, -z);  // 左、上、奥
 
+	//	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//}
+
+	//////// ４枚めの描画 // 右面
+	//{
+	//	// 三角形１つめ
+	//	pos[0] = Vec3( x, -y, z); // 右、下、前
+	//	pos[1] = Vec3( x, y, z);  // 右、上、前
+	//	pos[2] = Vec3( x, -y, -z);// 右、下、奥
+	//	// 三角形２つめ	
+	//	pos[3] = Vec3( x, y, z);   // 右、上、前
+	//	pos[4] = Vec3( x, -y, -z); // 右、下、奥
+	//	pos[5] = Vec3( x, y, -z);  // 右、上、奥
+
+	//	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//}
+
+	//////// ５枚めの描画 // 下面
+	{
 
 	}
 
-	//////// ４枚めの描画
-	{
-
-
-	}
-
-	//////// ５枚めの描画
-	{
-
-
-	}
-
-	//////// ６枚めの描画
+	//////// ６枚めの描画 // 上面
 	{
 
 
