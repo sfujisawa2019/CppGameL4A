@@ -16,4 +16,6 @@ public:
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(HelloShader);
+
+	cocos2d::CustomCommand _customCommand;
 };
