@@ -195,12 +195,18 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	
 	// ワールドビュープロジェクション行列の生成
 	static float yaw = 0.0f;
-	yaw += 0.01f;
+	// ラジアン
+	//yaw += 0.01f;
+	//yaw += CC_RADIANS_TO_DEGREES(1.0f);
+	yaw += CC_DEGREES_TO_RADIANS(3.0f);
 	Mat4 matProjection;
 	Mat4 matView;
 	Mat4 matWVP;
+	// ゲームワールドの中心からみた座標系に変換
 	Mat4 matWorld = Mat4::IDENTITY;
+	// ２Ｄの座標系に変換
 	matProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+	// カメラから見た座標系に変換
 	matView = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
 	// スケーリング行列
@@ -217,7 +223,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	matRot = matRotY * matRotX * matRotZ;
 	// 平行行列
 	Mat4 matTrans;
-	Mat4::createTranslation(Vec3(250.0f, 50.0f, 0.0f), &matTrans);
+	Mat4::createTranslation(Vec3(1280.0f/2, 720.0f/2, 0.0f), &matTrans);
 	// ワールド行列を合成
 	matWorld = matTrans * matRot * matScale;
 
