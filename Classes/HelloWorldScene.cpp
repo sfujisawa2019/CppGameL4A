@@ -154,17 +154,10 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	Vec3 pos[6];
 	Vec4 color[6];
 	Vec2 uv[6];
+	Mat4 matWVP;
 
-	const float x = 50.0f;
-	const float y = 50.0f;
-	// 三角形１つめ
-	pos[0] = Vec3(-x, -y, 0);
-	pos[1] = Vec3(-x,  y, 0);
-	pos[2] = Vec3( x, -y, 0);
-	// 三角形２つめ
-	pos[3] = Vec3(-x,  y, 0);
-	pos[4] = Vec3( x, -y, 0);
-	pos[5] = Vec3( x,  y, 0);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
 
 	//color[0] = Vec3(0, 0, 0); // 黒
 	//color[1] = Vec3(1, 0, 0); // 赤
@@ -189,9 +182,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	uv[4] = Vec2(1, 1);
 	uv[5] = Vec2(1, 0);
 
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
-	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
+		//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
 	
 	// ワールドビュープロジェクション行列の生成
 	static float yaw = 0.0f;
@@ -202,7 +193,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	yaw += CC_DEGREES_TO_RADIANS(3.0f);
 	Mat4 matProjection;
 	Mat4 matView;
-	Mat4 matWVP;
+	
 	// ゲームワールドの中心からみた座標系に変換
 	Mat4 matWorld = Mat4::IDENTITY;
 	// ２Ｄの座標系に変換
@@ -215,7 +206,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	// 120frmで周期が一周
 	float scale = CC_DEGREES_TO_RADIANS(3.0f * counter);
 	// 引数をラジアンとしてサイン関数（6.28ぐらいで一周期）
-	scale = sinf(scale);
+	scale = sinf(scale) + 2.0f;
 	Mat4::createScale(scale, scale, scale, &matScale);
 	// 回転行列
 	Mat4 matRot;
@@ -242,10 +233,35 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 
+	const float x = 50.0f;
+	const float y = 50.0f;
+	const float z = 50.0f;
+
+	//////// １枚めの描画
+	// 三角形１つめ
+	pos[0] = Vec3(-x, -y, z);
+	pos[1] = Vec3(-x, y, z);
+	pos[2] = Vec3(x, -y, z);
+	// 三角形２つめ	
+	pos[3] = Vec3(-x, y, z);
+	pos[4] = Vec3(x, -y, z);
+	pos[5] = Vec3(x, y, z);
+
 	//            図形         先頭番号　頂点数
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	//////// ２枚めの描画
+	// 三角形１つめ
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x, y,  -z);
+	pos[2] = Vec3(x, -y,  -z);
+	// 三角形２つめ
+	pos[3] = Vec3(-x, y,  -z);
+	pos[4] = Vec3(x, -y,  -z);
+	pos[5] = Vec3(x, y,   -z);
 
+	//            図形         先頭番号　頂点数
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 
