@@ -136,6 +136,13 @@ bool HelloWorld::init()
 	// îwåiêFÇÃéwíË
 	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
 
+	sprite2 = Sprite::create();
+	this->addChild(sprite2);
+	MoveTo* actionM = MoveTo::create(1.0f, Vec2(2.0f, 0.0f));
+	action = EaseIn::create(actionM, 5.0f);
+	action->retain();
+	sprite2->runAction(action);
+
 	counter = 0;
 
     return true;
@@ -146,22 +153,36 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	m_pProgram->use();
 
-	counter++;
+	static float ratio = 0.0f;
 
 	Vec3 pos[6];
 	Vec4 color[6];
 	Vec2 uv[6];
 
+	if (action)
+	{
+		if (action->isDone())
+		{
+			action->release();
+			action = nullptr;
+		}
+		else
+		{
+			ratio = sprite2->getPositionX();
+		}
+
+	}
+
 	const float x = 0.7f;
 	const float y = 0.7f;
 	// éOäpå`ÇPÇ¬Çﬂ
-	pos[0] = Vec3(-x - counter / 120.0f, -y + counter / 120.0f, 0);
-	pos[1] = Vec3(-x - counter / 120.0f,  y + counter / 120.0f, 0);
-	pos[2] = Vec3( x - counter / 120.0f, -y + counter / 120.0f, 0);
+	pos[0] = Vec3(-x - ratio, -y + ratio, 0);
+	pos[1] = Vec3(-x - ratio,  y + ratio, 0);
+	pos[2] = Vec3( x - ratio, -y + ratio, 0);
 	// éOäpå`ÇQÇ¬Çﬂ
-	pos[3] = Vec3(-x + counter / 120.0f,  y - counter / 120.0f, 0);
-	pos[4] = Vec3( x + counter / 120.0f, -y - counter / 120.0f, 0);
-	pos[5] = Vec3( x + counter / 120.0f,  y - counter / 120.0f, 0);
+	pos[3] = Vec3(-x + ratio,  y - ratio, 0);
+	pos[4] = Vec3( x + ratio, -y - ratio, 0);
+	pos[5] = Vec3( x + ratio,  y - ratio, 0);
 
 	//color[0] = Vec3(0, 0, 0); // çï
 	//color[1] = Vec3(1, 0, 0); // ê‘

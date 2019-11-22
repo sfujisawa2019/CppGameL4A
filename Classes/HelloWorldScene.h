@@ -48,6 +48,8 @@ public:
 	int uniform_sampler;
 
 	cocos2d::Texture2D* m_pTexture;
+	cocos2d::Sprite* sprite2;
+	cocos2d::ActionInterval* action;
 
 	int counter;
 };
