@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "ShaderNode.h"
 
 class HelloShader : public cocos2d::Layer
 {
@@ -14,8 +15,12 @@ public:
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
 
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event*);
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event*);
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event*);
+
 	// implement the "static create()" method manually
 	CREATE_FUNC(HelloShader);
 
-	cocos2d::CustomCommand _customCommand;
+	ShaderNode* node;
 };

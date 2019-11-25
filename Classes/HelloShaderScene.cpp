@@ -81,7 +81,7 @@ bool HelloShader::init()
 	//this->addChild(layerColor, 2);
 
 	// HelloWorld‚ÌƒŒƒCƒ„[‚ðì¬B•`‰æ—Dæ‚Í1
-	Node* node = ShaderNode::create();
+	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
 	//node->setRotation(45);
 	//node->setScale(3.0f);
@@ -105,6 +105,13 @@ bool HelloShader::init()
 	//scene->addChild(spriteB, 0);
 	//scene->addChild(spriteC, 1);
 
+	EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = CC_CALLBACK_2(HelloShader::onTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(HelloShader::onTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(HelloShader::onTouchEnded, this);
+	listener->onTouchCancelled = CC_CALLBACK_2(HelloShader::onTouchEnded, this);
+	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
 	return true;
 }
 
@@ -115,4 +122,21 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
+}
+
+bool HelloShader::onTouchBegan(Touch* touch, Event*)
+{
+	node->setPosition(touch->getLocation());
+
+	return true;
+}
+
+void HelloShader::onTouchMoved(Touch* touch, Event*)
+{
+
+}
+
+void HelloShader::onTouchEnded(Touch* touch, Event*)
+{
+
 }
