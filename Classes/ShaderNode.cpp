@@ -47,70 +47,6 @@ bool ShaderNode::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(ShaderNode::menuCloseCallback, this));
-
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
-
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
-
-    // add "ShaderNode" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
-
 	GLenum error;
 
 	m_pProgram = new GLProgram;
@@ -162,48 +98,11 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	m_uv[5] = Vec2(1, 0);
 
 	// ワールドビュープロジェクション行列の生成
-	static float yaw = 0.0f;
-	// ラジアン
-	//yaw += 0.01f;
-	//yaw += CC_RADIANS_TO_DEGREES(1.0f);
-	// 120frmで一回転
-	yaw += CC_DEGREES_TO_RADIANS(3.0f);
 	Mat4 matProjection;
-	Mat4 matView;
 
-	// ゲームワールドの中心からみた座標系に変換
-	Mat4 matWorld = Mat4::IDENTITY;
 	// ２Ｄの座標系に変換
 	matProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-	// カメラから見た座標系に変換
-	matView = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
-	// スケーリング行列
-	Mat4 matScale;
-	// 120frmで周期が一周
-	float scale = CC_DEGREES_TO_RADIANS(3.0f * counter);
-	// 引数をラジアンとしてサイン関数（6.28ぐらいで一周期）
-	scale = sinf(scale) + 2.0f;
-	Mat4::createScale(scale, scale, scale, &matScale);
-	// 回転行列
-	Mat4 matRot;
-	Mat4 matRotX, matRotY, matRotZ;
-	// 各軸周りの回転行列を計算し、最後に合成
-	Mat4::createRotationZ(0, &matRotZ);
-	Mat4::createRotationX(0, &matRotX);
-	Mat4::createRotationY(yaw, &matRotY);
-	matRot = matRotY * matRotX * matRotZ;
-	// 平行行列
-	Mat4 matTrans;
-	Mat4::createTranslation(Vec3(1280.0f / 2, 720.0f / 2, 0.0f), &matTrans);
-	// ワールド行列を合成
-	matWorld = matTrans * matRot * matScale;
-
-	matWVP = matProjection * matView * matWorld;
-
-	// 右向きを表すベクトル
-	Vec3 v1(1, 0, 0);
-	matWorld.transformVector(&v1);
+	matWVP = matProjection * transform;
 }
 
 void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
