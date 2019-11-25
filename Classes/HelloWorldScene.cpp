@@ -144,6 +144,15 @@ bool HelloWorld::init()
 
 void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
+	// onDrawをCustomCommandを利用して、描画コマンドとして
+	// レンダラーに予約
+	_customCommand.init(_globalZOrder, transform, flags);
+	_customCommand.func = CC_CALLBACK_0(HelloWorld::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+}
+
+void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
+{
 	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
 
@@ -168,7 +177,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	float green = 0.0f;
 	float blue = 0.0f;
 
-	color[0] = Vec4(1, 0, 0, 1); 
+	color[0] = Vec4(1, 0, 0, 1);
 	color[1] = Vec4(1, 0, 0, 1);
 	color[2] = Vec4(1, 0, 0, 1);
 	color[3] = Vec4(1, 0, 0, 1);
@@ -182,9 +191,9 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	uv[4] = Vec2(1, 1);
 	uv[5] = Vec2(1, 0);
 
-		//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
-	
-	// ワールドビュープロジェクション行列の生成
+	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
+
+// ワールドビュープロジェクション行列の生成
 	static float yaw = 0.0f;
 	// ラジアン
 	//yaw += 0.01f;
@@ -193,7 +202,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	yaw += CC_DEGREES_TO_RADIANS(3.0f);
 	Mat4 matProjection;
 	Mat4 matView;
-	
+
 	// ゲームワールドの中心からみた座標系に変換
 	Mat4 matWorld = Mat4::IDENTITY;
 	// ２Ｄの座標系に変換
@@ -218,7 +227,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	matRot = matRotY * matRotX * matRotZ;
 	// 平行行列
 	Mat4 matTrans;
-	Mat4::createTranslation(Vec3(1280.0f/2, 720.0f/2, 0.0f), &matTrans);
+	Mat4::createTranslation(Vec3(1280.0f / 2, 720.0f / 2, 0.0f), &matTrans);
 	// ワールド行列を合成
 	matWorld = matTrans * matRot * matScale;
 

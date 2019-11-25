@@ -42,6 +42,8 @@ public:
 
 	// 関数宣言
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
+	void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+
 	// 変数宣言
 	cocos2d::GLProgram* m_pProgram;
 
@@ -51,6 +53,9 @@ public:
 	cocos2d::Texture2D* m_pTexture;
 
 	int counter;
+
+	// カスタムコマンド
+	cocos2d::CustomCommand _customCommand;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
