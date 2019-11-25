@@ -22,15 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "HelloWorldScene.h"
+#include "ShaderNode.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
-
-Scene* HelloWorld::createScene()
-{
-    return HelloWorld::create();
-}
 
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
@@ -40,11 +35,11 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool ShaderNode::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !Scene::init() )
+    if ( !Node::init() )
     {
         return false;
     }
@@ -60,7 +55,7 @@ bool HelloWorld::init()
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+                                           CC_CALLBACK_1(ShaderNode::menuCloseCallback, this));
 
     if (closeItem == nullptr ||
         closeItem->getContentSize().width <= 0 ||
@@ -101,7 +96,7 @@ bool HelloWorld::init()
         this->addChild(label, 1);
     }
 
-    // add "HelloWorld" splash screen"
+    // add "ShaderNode" splash screen"
     auto sprite = Sprite::create("HelloWorld.png");
     if (sprite == nullptr)
     {
@@ -142,12 +137,12 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
 	// onDrawをCustomCommandを利用して、描画コマンドとして
 	// レンダラーに予約
 	_customCommand.init(_globalZOrder, transform, flags);
-	_customCommand.func = CC_CALLBACK_0(HelloWorld::onDraw, this, transform, flags);
+	_customCommand.func = CC_CALLBACK_0(ShaderNode::onDraw, this, transform, flags);
 	renderer->addCommand(&_customCommand);
 
 	counter++;
@@ -211,7 +206,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	matWorld.transformVector(&v1);
 }
 
-void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
+void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 {
 	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
@@ -300,7 +295,7 @@ void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void ShaderNode::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();

@@ -1,6 +1,6 @@
 #include "HelloShaderScene.h"
 
-#include "HelloWorldScene.h"
+#include "ShaderNode.h"
 
 USING_NS_CC;
 
@@ -81,7 +81,7 @@ bool HelloShader::init()
 	this->addChild(layerColor, 2);
 
 	// HelloWorld‚ÌƒŒƒCƒ„[‚ðì¬B•`‰æ—Dæ‚Í1
-	Node* node = HelloWorld::create();
+	Node* node = ShaderNode::create();
 	this->addChild(node, 1);
 
 	Sprite* spriteA = Sprite::create("HelloWorld.png");
