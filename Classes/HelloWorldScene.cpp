@@ -149,51 +149,24 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	_customCommand.init(_globalZOrder, transform, flags);
 	_customCommand.func = CC_CALLBACK_0(HelloWorld::onDraw, this, transform, flags);
 	renderer->addCommand(&_customCommand);
-}
-
-void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
-{
-	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
-
-	m_pProgram->use();
 
 	counter++;
 
-	Vec3 pos[6];
-	Vec4 color[6];
-	Vec2 uv[6];
-	Mat4 matWVP;
+	m_color[0] = Vec4(1, 0, 0, 1);
+	m_color[1] = Vec4(1, 0, 0, 1);
+	m_color[2] = Vec4(1, 0, 0, 1);
+	m_color[3] = Vec4(1, 0, 0, 1);
+	m_color[4] = Vec4(1, 0, 0, 1);
+	m_color[5] = Vec4(1, 0, 0, 1);
 
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
+	m_uv[0] = Vec2(0, 1);
+	m_uv[1] = Vec2(0, 0);
+	m_uv[2] = Vec2(1, 1);
+	m_uv[3] = Vec2(0, 0);
+	m_uv[4] = Vec2(1, 1);
+	m_uv[5] = Vec2(1, 0);
 
-	//color[0] = Vec3(0, 0, 0); // 黒
-	//color[1] = Vec3(1, 0, 0); // 赤
-	//color[2] = Vec3(0, 1, 0); // 緑
-	//color[3] = Vec3(0, 0, 1); // 青
-
-	float red = 1.0f;
-	float green = 0.0f;
-	float blue = 0.0f;
-
-	color[0] = Vec4(1, 0, 0, 1);
-	color[1] = Vec4(1, 0, 0, 1);
-	color[2] = Vec4(1, 0, 0, 1);
-	color[3] = Vec4(1, 0, 0, 1);
-	color[4] = Vec4(1, 0, 0, 1);
-	color[5] = Vec4(1, 0, 0, 1);
-
-	uv[0] = Vec2(0, 1);
-	uv[1] = Vec2(0, 0);
-	uv[2] = Vec2(1, 1);
-	uv[3] = Vec2(0, 0);
-	uv[4] = Vec2(1, 1);
-	uv[5] = Vec2(1, 0);
-
-	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
-
-// ワールドビュープロジェクション行列の生成
+	// ワールドビュープロジェクション行列の生成
 	static float yaw = 0.0f;
 	// ラジアン
 	//yaw += 0.01f;
@@ -236,6 +209,18 @@ void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	// 右向きを表すベクトル
 	Vec3 v1(1, 0, 0);
 	matWorld.transformVector(&v1);
+}
+
+void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
+{
+	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+
+	m_pProgram->use();
+
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, m_pos);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, m_color);
+	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, m_uv);
 
 	//glUniform1i(uniform_sampler, 0);
 	//GL::bindTexture2D(m_pTexture->getName());
@@ -249,13 +234,13 @@ void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	//////// １枚めの描画 前面
 	{
 		// 三角形１つめ
-		pos[0] = Vec3(-x, -y, z);
-		pos[1] = Vec3(-x, y, z);
-		pos[2] = Vec3(x, -y, z);
+		m_pos[0] = Vec3(-x, -y, z);
+		m_pos[1] = Vec3(-x, y, z);
+		m_pos[2] = Vec3(x, -y, z);
 		// 三角形２つめ	
-		pos[3] = Vec3(-x, y, z);
-		pos[4] = Vec3(x, -y, z);
-		pos[5] = Vec3(x, y, z);
+		m_pos[3] = Vec3(-x, y, z);
+		m_pos[4] = Vec3(x, -y, z);
+		m_pos[5] = Vec3(x, y, z);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
@@ -263,13 +248,13 @@ void HelloWorld::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	//////// ２枚めの描画 奥面
 	{
 		// 三角形１つめ
-		pos[0] = Vec3(-x, -y, -z);
-		pos[1] = Vec3(-x, y, -z);
-		pos[2] = Vec3(x, -y, -z);
+		m_pos[0] = Vec3(-x, -y, -z);
+		m_pos[1] = Vec3(-x, y, -z);
+		m_pos[2] = Vec3(x, -y, -z);
 		// 三角形２つめ
-		pos[3] = Vec3(-x, y, -z);
-		pos[4] = Vec3(x, -y, -z);
-		pos[5] = Vec3(x, y, -z);
+		m_pos[3] = Vec3(-x, y, -z);
+		m_pos[4] = Vec3(x, -y, -z);
+		m_pos[5] = Vec3(x, y, -z);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
