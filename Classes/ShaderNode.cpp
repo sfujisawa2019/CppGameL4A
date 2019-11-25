@@ -47,6 +47,11 @@ bool ShaderNode::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	// 子ノードがいれば、子ノードも一緒に変形する
+	//Sprite* spr = Sprite::create("HelloWorld.png");
+	//this->addChild(spr);
+	//spr->setPosition(Vec2(200, 0));
+
 	GLenum error;
 
 	m_pProgram = new GLProgram;
@@ -83,19 +88,23 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	counter++;
 
-	m_color[0] = Vec4(1, 0, 0, 1);
-	m_color[1] = Vec4(1, 0, 0, 1);
-	m_color[2] = Vec4(1, 0, 0, 1);
-	m_color[3] = Vec4(1, 0, 0, 1);
-	m_color[4] = Vec4(1, 0, 0, 1);
-	m_color[5] = Vec4(1, 0, 0, 1);
+	Size size = getContentSize();
+
+	// 三角形１つめ
+	m_pos[0] = Vec3(-size.width / 2.0f, -size.height / 2.0f, 0);
+	m_pos[1] = Vec3(-size.width / 2.0f,  size.height / 2.0f, 0);
+	m_pos[2] = Vec3( size.width / 2.0f, -size.height / 2.0f, 0);
+	m_pos[3] = Vec3( size.width / 2.0f,  size.height / 2.0f, 0);
+
+	m_color[0] = Vec4(_realColor.r / 255.0f, _realColor.g / 255.0f, _realColor.b / 255.0f, _realOpacity / 255.0f);
+	m_color[1] = Vec4(_realColor.r / 255.0f, _realColor.g / 255.0f, _realColor.b / 255.0f, _realOpacity / 255.0f);
+	m_color[2] = Vec4(_realColor.r / 255.0f, _realColor.g / 255.0f, _realColor.b / 255.0f, _realOpacity / 255.0f);
+	m_color[3] = Vec4(_realColor.r / 255.0f, _realColor.g / 255.0f, _realColor.b / 255.0f, _realOpacity / 255.0f);
 
 	m_uv[0] = Vec2(0, 1);
 	m_uv[1] = Vec2(0, 0);
 	m_uv[2] = Vec2(1, 1);
-	m_uv[3] = Vec2(0, 0);
-	m_uv[4] = Vec2(1, 1);
-	m_uv[5] = Vec2(1, 0);
+	m_uv[3] = Vec2(1, 0);
 
 	// ワールドビュープロジェクション行列の生成
 	Mat4 matProjection;
@@ -107,6 +116,9 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 {
+	// 半透明
+	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
 
@@ -121,76 +133,8 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 
-	const float x = 50.0f;
-	const float y = 50.0f;
-	const float z = 50.0f;
-
-	//////// １枚めの描画 前面
-	{
-		// 三角形１つめ
-		m_pos[0] = Vec3(-x, -y, z);
-		m_pos[1] = Vec3(-x, y, z);
-		m_pos[2] = Vec3(x, -y, z);
-		// 三角形２つめ	
-		m_pos[3] = Vec3(-x, y, z);
-		m_pos[4] = Vec3(x, -y, z);
-		m_pos[5] = Vec3(x, y, z);
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-
-	//////// ２枚めの描画 奥面
-	{
-		// 三角形１つめ
-		m_pos[0] = Vec3(-x, -y, -z);
-		m_pos[1] = Vec3(-x, y, -z);
-		m_pos[2] = Vec3(x, -y, -z);
-		// 三角形２つめ
-		m_pos[3] = Vec3(-x, y, -z);
-		m_pos[4] = Vec3(x, -y, -z);
-		m_pos[5] = Vec3(x, y, -z);
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-
-	//////// ３枚めの描画 // 左面
-	//{
-	//	// 三角形１つめ
-	//	pos[0] = Vec3(-x, -y, z); // 左、下、前
-	//	pos[1] = Vec3(-x, y, z);  // 左、上、前
-	//	pos[2] = Vec3(-x, -y, -z);// 左、下、奥
-	//	// 三角形２つめ	
-	//	pos[3] = Vec3(-x, y, z);   // 左、上、前
-	//	pos[4] = Vec3(-x, -y, -z); // 左、下、奥
-	//	pos[5] = Vec3(-x, y, -z);  // 左、上、奥
-
-	//	glDrawArrays(GL_TRIANGLES, 0, 6);
-	//}
-
-	//////// ４枚めの描画 // 右面
-	//{
-	//	// 三角形１つめ
-	//	pos[0] = Vec3( x, -y, z); // 右、下、前
-	//	pos[1] = Vec3( x, y, z);  // 右、上、前
-	//	pos[2] = Vec3( x, -y, -z);// 右、下、奥
-	//	// 三角形２つめ	
-	//	pos[3] = Vec3( x, y, z);   // 右、上、前
-	//	pos[4] = Vec3( x, -y, -z); // 右、下、奥
-	//	pos[5] = Vec3( x, y, -z);  // 右、上、奥
-
-	//	glDrawArrays(GL_TRIANGLES, 0, 6);
-	//}
-
-	//////// ５枚めの描画 // 下面
-	{
-
-	}
-
-	//////// ６枚めの描画 // 上面
-	{
-
-
-	}
+	// ４頂点での描画
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 
