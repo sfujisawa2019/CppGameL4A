@@ -5,13 +5,17 @@ uniform vec2 center;
 
 void main(){
 
+//center(1280-250, )
+//gl_FragCoord.x(1280-250, )
+
 	// 描画ピクセルの座標と図形の中心座標の差を計算
-	// gl_FragCoord.xy(640,480)
-	// gl_FragCoord.xy(740,580)
 	vec2 p = gl_FragCoord.xy - center;
 
-	// p(0,0,0,1)
-	gl_FragColor = vec4(p.x, p.y, 0, 1);
+	float col;
+
+	col = p.x;
+
+	gl_FragColor = vec4(col/250, col/250, col/250, 1);
 	
 	//gl_FragColor *= v_color;
 }
