@@ -88,7 +88,7 @@ bool HelloShader::init()
 	//node->setFlippedX(true);
 	//node->setVisible(false);
 	//node->setColor(Color3B(255, 0, 0));
-	//node->setOpacity(10);
+	node->setOpacity(128);
 	// 表示サイズを指定
 	node->setContentSize(Size(200, 200));
 	this->addChild(node, 1);
@@ -97,6 +97,8 @@ bool HelloShader::init()
 	node->runAction(action);
 
 	Sprite* spriteA = Sprite::create("HelloWorld.png");
+	spriteA->setPosition(400, 360);
+	this->addChild(spriteA, 2);
 	//Sprite* spriteB;
 	//Sprite* spriteC;
 
@@ -126,14 +128,14 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 
 bool HelloShader::onTouchBegan(Touch* touch, Event*)
 {
-	node->setPosition(touch->getLocation());
+	
 
 	return true;
 }
 
 void HelloShader::onTouchMoved(Touch* touch, Event*)
 {
-
+	node->setPosition(touch->getLocation());
 }
 
 void HelloShader::onTouchEnded(Touch* touch, Event*)
