@@ -88,13 +88,13 @@ bool HelloShader::init()
 	//node->setFlippedX(true);
 	//node->setVisible(false);
 	//node->setColor(Color3B(255, 0, 0));
-	node->setOpacity(128);
+	//node->setOpacity(128);
 	// 表示サイズを指定
 	node->setContentSize(Size(200, 200));
 	this->addChild(node, 1);
 
-	RotateBy* action = RotateBy::create(10, 360 * 10);
-	node->runAction(action);
+	//RotateBy* action = RotateBy::create(10, 360 * 10);
+	//node->runAction(action);
 
 	Sprite* spriteA = Sprite::create("HelloWorld.png");
 	spriteA->setPosition(400, 360);
