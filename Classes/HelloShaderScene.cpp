@@ -90,7 +90,7 @@ bool HelloShader::init()
 	//node->setColor(Color3B(255, 0, 0));
 	//node->setOpacity(128);
 	// 表示サイズを指定
-	node->setContentSize(Size(200, 200));
+	node->setContentSize(Size(1280, 720));
 	this->addChild(node, 1);
 
 	//RotateBy* action = RotateBy::create(10, 360 * 10);
