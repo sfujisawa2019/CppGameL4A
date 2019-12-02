@@ -1,13 +1,17 @@
 varying vec4 v_color; // （入力）色
 
+// center(640,480)
+uniform vec2 center;
+
 void main(){
-	// 今は常にREDが最大値
-	// 1以上は常に最大値
-	// 0.0~1.0fまで範囲で色を指定しよう！
-	// xが1280の時にrが1.0fになるように数式で調整
-	//gl_FragColor = vec4(gl_FragCoord.x/1280.0, 0, 0, 1);
-	// 練習２
-	gl_FragColor = vec4(gl_FragCoord.x/1280.0, gl_FragCoord.y/720.0, 0, 1);
+
+	// 描画ピクセルの座標と図形の中心座標の差を計算
+	// gl_FragCoord.xy(640,480)
+	// gl_FragCoord.xy(740,580)
+	vec2 p = gl_FragCoord.xy - center;
+
+	// p(0,0,0,1)
+	gl_FragColor = vec4(p.x, p.y, 0, 1);
 	
 	//gl_FragColor *= v_color;
 }
