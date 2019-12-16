@@ -38,7 +38,7 @@ void main(){
 	//col = deg / 360.0;
 
 	// alpha‚Æalpha2‚ª—¼•û1‚ÌŠ‚¾‚¯AŒ‹‰Ê‚ª1‚É‚È‚é
-	alpha = alpha * alpha2
+	alpha = alpha * alpha2;
 
 	gl_FragColor = vec4(col, col, 0, alpha);
 	
