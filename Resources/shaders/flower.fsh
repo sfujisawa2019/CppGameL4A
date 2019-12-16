@@ -2,6 +2,8 @@ varying vec4 v_color; // （入力）色
 
 // center(640,480)
 uniform vec2 center;
+// 図形の大きさ（の半分）
+uniform vec2 size_div2;
 
 void main(){
 
@@ -13,9 +15,10 @@ void main(){
 
 	float col;
 
-	col = p.x;
+	// 描画ピクセルと図形の中心座標の差を正規化(-1～+1)
+	col = p.x / size_div2.x;
 
-	gl_FragColor = vec4(col/250, col/250, col/250, 1);
+	gl_FragColor = vec4(col, col, col, 1);
 	
 	//gl_FragColor *= v_color;
 }

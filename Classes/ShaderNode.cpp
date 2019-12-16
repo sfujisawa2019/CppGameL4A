@@ -68,6 +68,7 @@ bool ShaderNode::init()
 	//uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
 	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 	uniform_center = glGetUniformLocation(m_pProgram->getProgram(), "center");
+	uniform_size_div2 = glGetUniformLocation(m_pProgram->getProgram(), "size_div2");
 
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
@@ -136,6 +137,8 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	Vec2 pos = this->getPosition();
 	//glUniform2fv(uniform_center, 1, (float*)&pos);
 	glUniform2f(uniform_center, pos.x, pos.y);
+	Size size = this->getContentSize();
+	glUniform2f(uniform_size_div2, size.width / 2.0f, size.height / 2.0f);
 
 	// ‚S’¸“_‚Å‚Ì•`‰æ
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

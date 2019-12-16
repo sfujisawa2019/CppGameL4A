@@ -64,6 +64,7 @@ public:
 
 	// uniform•Ï”‚Ì”Ô†
 	int uniform_center;
+	int uniform_size_div2;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
