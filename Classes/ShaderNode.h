@@ -65,6 +65,10 @@ public:
 	// uniform•Ï”‚Ì”Ô†
 	int uniform_center;
 	int uniform_size_div2;
+	int uniform_time;
+
+	// Œo‰ß•b”
+	float m_time;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
