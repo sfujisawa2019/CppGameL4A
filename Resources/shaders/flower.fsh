@@ -15,10 +15,14 @@ void main(){
 	// •`‰æƒsƒNƒZƒ‹‚ÌÀ•W‚Æ}Œ`‚Ì’†SÀ•W‚Ì·‚ğŒvZ
 	// (-250`+250)
 	vec2 p = gl_FragCoord.xy - center;
+	p /= size_div2;
 
 	float col = 1.0;
+
+	float angle = atan(p.y, p.x);
+
 	// (-1`+1)
-	float w = sin(time * 3.14);
+	float w = sin(sin(time * 3.14) - angle);
 	// (0`1)
 	col = w / 2.0 + 0.5;
 
