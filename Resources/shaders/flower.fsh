@@ -7,6 +7,12 @@ uniform vec2 size_div2;
 // 経過時間（秒）
 uniform float time;
 
+float u(float x)
+{
+	// xが0より大きければ1、そうでなければ0を返す
+	return (x > 0.0) ? 1.0 : 0.0;
+}
+
 void main(){
 
 //center(1280-250, )
@@ -18,27 +24,27 @@ void main(){
 	// (-1～+1)
 	p /= size_div2;
 
-	float col = 1.0;
+	// 中心からの角度
+	float a = atan(p.x, p.y);
 
-	float angle = atan(p.y, p.x);
-
-	// 中心からの距離で色を決める(0～1)
-	float len = length(p);
+	// 中心からの距離
+	float r = length(p);
 	
 	// (-1～+1)
-	float w = sin(time * 3.14);
-	// sinの頂点(+1.0)付近の範囲で繰り返し
-	//w = sin(w+1.57);
-	w = cos(w);
-	// (0～1)
-	w = w / 2.0 + 0.5;
+	float w = cos(time * 3.14 - r * 2.0);
 
-	// 円にする
-	col = len;
-	// 色を反転
-	col = 1 - col;
-	// sinカーブの影響
-	col *= w;
+	float h = 0.5 + 0.5 * cos(12.0*a - w * 7.0 + r * 8.0);
+	
+	float d = 0.25 + 0.75 * pow(h,1.0*r)*(0.7 + 0.3*w);
 
-	gl_FragColor = vec4(col, col, col, 1);
+	float col = u(d-r) * sqrt(1.0-r/d)*r*2.5;
+
+	col *= 1.25+0.25*cos((12.0*a-w*7.0+r*8.0)/2.0);
+	col *= 1.0 - 0.35*(0.5+0.5*sin(r*30.0))*(0.5+0.5*cos(12.0*a-w*7.0+r*8.0));
+
+	gl_FragColor = vec4(
+	col,
+	col-h*0.5+r*0.2,
+	col-h*r + 0.1 * h * (1.0-r),
+	1);
 }
