@@ -56,25 +56,25 @@ bool HelloShader::init()
 	// add a label shows "Hello World"
 	// create and initialize a label
 
-	auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+	//auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
 
-	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height));
+	//// position the label on the center of the screen
+	//label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+	//	origin.y + visibleSize.height - label->getContentSize().height));
 
-	// add the label as a child to this layer
-	this->addChild(label, 1);
+	//// add the label as a child to this layer
+	//this->addChild(label, 1);
 
 	Sprite* sprite;
 
-	Director::getInstance()->setClearColor(Color4F(0.0f, 1.0f, 0.0f, 0.0f));
+	Director::getInstance()->setClearColor(Color4F(0.0f, 0.0f, 0.0f, 0.0f));
 
 	// Cocosのロゴスプライトを作成。描画優先は0
-	sprite = Sprite::create("HelloWorld.png");
-	sprite->setColor(Color3B(0xff, 0x00, 0x00));
-	sprite->setScale(2.0f);
-	sprite->setPosition(Vec2(visibleSize.width/2 + origin.x + 200, visibleSize.height/2 + origin.y));
-	this->addChild(sprite, 0);
+	//sprite = Sprite::create("HelloWorld.png");
+	//sprite->setColor(Color3B(0xff, 0x00, 0x00));
+	//sprite->setScale(2.0f);
+	//sprite->setPosition(Vec2(visibleSize.width/2 + origin.x + 200, visibleSize.height/2 + origin.y));
+	//this->addChild(sprite, 0);
 
 	//// LayerColorの使用例
 	//LayerColor* layerColor = LayerColor::create(Color4B(255, 255, 0, 255), 500, 500);
@@ -96,9 +96,9 @@ bool HelloShader::init()
 	//RotateBy* action = RotateBy::create(10, 360 * 10);
 	//node->runAction(action);
 
-	Sprite* spriteA = Sprite::create("HelloWorld.png");
-	spriteA->setPosition(400, 360);
-	this->addChild(spriteA, 2);
+	//Sprite* spriteA = Sprite::create("HelloWorld.png");
+	//spriteA->setPosition(400, 360);
+	//this->addChild(spriteA, 2);
 	//Sprite* spriteB;
 	//Sprite* spriteC;
 

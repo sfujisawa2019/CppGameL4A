@@ -73,8 +73,8 @@ bool ShaderNode::init()
 
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
-	// ”wŒiF‚ÌŽw’è
-	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
+	//// ”wŒiF‚ÌŽw’è
+	//Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
 
 	counter = 0;
 
