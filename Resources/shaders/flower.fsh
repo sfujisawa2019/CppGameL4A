@@ -15,16 +15,30 @@ void main(){
 	// 描画ピクセルの座標と図形の中心座標の差を計算
 	// (-250～+250)
 	vec2 p = gl_FragCoord.xy - center;
+	// (-1～+1)
 	p /= size_div2;
 
 	float col = 1.0;
 
 	float angle = atan(p.y, p.x);
 
+	// 中心からの距離で色を決める(0～1)
+	float len = length(p);
+	
 	// (-1～+1)
-	float w = sin(sin(time * 3.14) - angle);
+	float w = sin(time * 3.14);
+	// sinの頂点(+1.0)付近の範囲で繰り返し
+	//w = sin(w+1.57);
+	w = cos(w);
 	// (0～1)
-	col = w / 2.0 + 0.5;
+	w = w / 2.0 + 0.5;
+
+	// 円にする
+	col = len;
+	// 色を反転
+	col = 1 - col;
+	// sinカーブの影響
+	col *= w;
 
 	gl_FragColor = vec4(col, col, col, 1);
 }
