@@ -130,7 +130,15 @@ bool HelloShader::init()
 
 void HelloShader::menuCloseCallback(Ref* pSender)
 {
-	Director::getInstance()->end();
+	// 今のアクションを止める
+	m_pSprite3D->stopAllActions();
+	// ジャンプモーションのアクションを実行
+	Animation3D* animation = Animation3D::create("orc/orc_jump.c3t");
+	Animate3D* animate = Animate3D::create(animation);
+	//RepeatForever* repeat = RepeatForever::create(animate);
+	m_pSprite3D->runAction(animate);
+
+	//Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
@@ -139,7 +147,7 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 
 bool HelloShader::onTouchBegan(Touch* touch, Event*)
 {
-	
+	m_pSprite3D->setPosition(touch->getLocation());
 
 	return true;
 }
