@@ -23,4 +23,7 @@ public:
 	CREATE_FUNC(HelloShader);
 
 	ShaderNode* node;
+
+	// Sprite3D‚Ìƒ|ƒCƒ“ƒ^
+	cocos2d::Sprite3D* m_pSprite3D;
 };

@@ -81,8 +81,8 @@ bool HelloShader::init()
 	//this->addChild(layerColor, 2);
 
 	// HelloWorldのレイヤーを作成。描画優先は1
-	node = ShaderNode::create();
-	node->setPosition(Vec2(640, 360));
+	//node = ShaderNode::create();
+	//node->setPosition(Vec2(640, 360));
 	//node->setRotation(45);
 	//node->setScale(3.0f);
 	//node->setFlippedX(true);
@@ -90,8 +90,19 @@ bool HelloShader::init()
 	//node->setColor(Color3B(255, 0, 0));
 	//node->setOpacity(128);
 	// 表示サイズを指定
-	node->setContentSize(Size(500, 500));
-	this->addChild(node, 1);
+	//node->setContentSize(Size(500, 500));
+	//this->addChild(node, 1);
+
+	m_pSprite3D = Sprite3D::create("orc/orc.c3b");
+	m_pSprite3D->setPosition(640, 360);
+	m_pSprite3D->setScale(10.0f);
+	m_pSprite3D->setRotation3D(Vec3(0, 180, 0));
+	this->addChild(m_pSprite3D, 1);
+
+	Animation3D* animation = Animation3D::create("orc/orc.c3t");
+	Animate3D* animate = Animate3D::create(animation);
+	RepeatForever* repeat = RepeatForever::create(animate);
+	m_pSprite3D->runAction(repeat);
 
 	//RotateBy* action = RotateBy::create(10, 360 * 10);
 	//node->runAction(action);
@@ -135,7 +146,7 @@ bool HelloShader::onTouchBegan(Touch* touch, Event*)
 
 void HelloShader::onTouchMoved(Touch* touch, Event*)
 {
-	node->setPosition(touch->getLocation());
+	//node->setPosition(touch->getLocation());
 }
 
 void HelloShader::onTouchEnded(Touch* touch, Event*)
