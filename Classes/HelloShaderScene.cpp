@@ -93,10 +93,10 @@ bool HelloShader::init()
 	//node->setContentSize(Size(500, 500));
 	//this->addChild(node, 1);
 
-	m_pSprite3D = Sprite3D::create("orc/orc.c3b");
+	m_pSprite3D = Sprite3D::create("knight/knight.c3b");
 	m_pSprite3D->setPosition(640, 360);
-	m_pSprite3D->setScale(10.0f);
-	m_pSprite3D->setRotation3D(Vec3(0, 180, 0));
+	//m_pSprite3D->setScale(10.0f);
+	//m_pSprite3D->setRotation3D(Vec3(0, 180, 0));
 	this->addChild(m_pSprite3D, 1);
 
 	Animation3D* animation = Animation3D::create("orc/orc.c3t");
