@@ -55,22 +55,23 @@ bool ShaderNode::init()
 	GLenum error;
 
 	m_pProgram = new GLProgram;
-	m_pProgram->initWithFilenames("shaders/flower.vsh", "shaders/flower.fsh");
+	m_pProgram->initWithFilenames("shaders/dynamic_light.vsh", "shaders/dynamic_light.fsh");
 
 	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
-	//m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
 
 	m_pProgram->link();
 
 	m_pProgram->updateUniforms();
 
-	//uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
+	// uniform変数の番号を取得
+	uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
 	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 	uniform_center = glGetUniformLocation(m_pProgram->getProgram(), "center");
 	uniform_size_div2 = glGetUniformLocation(m_pProgram->getProgram(), "size_div2");
 	uniform_time = glGetUniformLocation(m_pProgram->getProgram(), "time");
-
+	// テクスチャ読み込み
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
 	//// 背景色の指定
@@ -126,17 +127,18 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	// 半透明
 	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
+	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
 
 	m_pProgram->use();
 
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, m_pos);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, m_color);
-	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, m_uv);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, m_uv);
 
-	//glUniform1i(uniform_sampler, 0);
-	//GL::bindTexture2D(m_pTexture->getName());
+	// テクスチャデータの指定
+	glUniform1i(uniform_sampler, 0);
+	GL::bindTexture2D(m_pTexture->getName());
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 	Vec2 pos = this->getPosition();
